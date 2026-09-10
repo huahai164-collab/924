@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>924 黑手党 Club</title>
+  <style>
+    :root{--bg:#0b0b0d;--panel:#151518;--red:#7a0d12;--gold:#c7a15a;--text:#f5f1e8;--muted:#9f9b93}
+    *{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at top,#241012 0,#0b0b0d 45%,#070708 100%);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;min-height:100vh;display:grid;place-items:center;padding:24px}
+    .wrap{width:min(920px,100%)} .brand{text-align:center;margin-bottom:30px}.brand h1{margin:0;font-size:clamp(34px,7vw,62px);letter-spacing:2px}.brand p{margin:10px 0 0;color:var(--gold);font-weight:700;letter-spacing:4px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{display:block;text-decoration:none;color:inherit;background:linear-gradient(180deg,#18181c,#111114);border:1px solid #2a2525;border-radius:18px;padding:26px 20px;min-height:190px;transition:.2s transform,.2s border-color;box-shadow:0 12px 36px rgba(0,0,0,.35)}.card:hover{transform:translateY(-3px);border-color:var(--gold)}
+    .tag{font-size:13px;color:var(--gold);letter-spacing:2px}.card h2{font-size:28px;margin:12px 0 8px}.card p{color:var(--muted);line-height:1.6;margin:0}.boss{border-top:3px solid var(--gold)}.hitter{border-top:3px solid var(--red)}.admin{border-top:3px solid #5d5d64}
+    .footer{text-align:center;color:#6f6c67;font-size:12px;margin-top:26px}
+    @media(max-width:720px){.grid{grid-template-columns:1fr}.card{min-height:auto}.brand{margin-bottom:20px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="brand">
+      <h1>924 黑手党 Club</h1>
+      <p>MAFIA OPERATIONS SYSTEM</p>
+    </section>
+    <section class="grid">
+      <a class="card boss" href="/boss/">
+        <div class="tag">BOSS PORTAL</div><h2>老板端</h2><p>点单、查看订单进程、历史订单与会员信息。</p>
+      </a>
+      <a class="card hitter" href="/hitter/">
+        <div class="tag">HITTER PORTAL</div><h2>打手端</h2><p>抢单、当前订单、聊天频道、账户余额与历史记录。</p>
+      </a>
+      <a class="card admin" href="/admin/">
+        <div class="tag">ADMIN PORTAL</div><h2>后台端</h2><p>订单、老板、打手、商品、提现与运营管理。</p>
+      </a>
+    </section>
+    <div class="footer">924 黑手党 Club · Operations System</div>
+  </main>
+</body>
+</html>
