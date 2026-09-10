@@ -1,0 +1,11 @@
+/*.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/boss/*
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/hitter/*
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/admin/*
+  Cache-Control: no-cache, no-store, must-revalidate
