@@ -1,0 +1,53 @@
+name: Switch portals to self-hosted login client
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch portal HTML
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          files=['boss/index.html','hitter/index.html','admin/index.html']
+          for fn in files:
+              p=Path(fn); s=p.read_text()
+              start=s.find("<script>const SUPA_SOURCES=")
+              if start!=-1:
+                  end=s.find('</script>',start)
+                  s=s[:start]+'<script src="/supabase-lite.js"></script>'+s[end+9:]
+              s=s.replace("await loadSupabase();","")
+              s=s.replace("if(!window.supabase)throw new Error('登录组件加载失败，请刷新页面');","")
+              p.write_text(s)
+          PY
+      - name: Verify JavaScript syntax
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re, subprocess, tempfile, sys
+          for fn in ['boss/index.html','hitter/index.html','admin/index.html']:
+              s=Path(fn).read_text()
+              scripts=re.findall(r'<script(?: [^>]*)?>(.*?)</script>',s,re.S)
+              for i,js in enumerate(scripts):
+                  if not js.strip(): continue
+                  f=tempfile.NamedTemporaryFile('w',suffix='.js',delete=False)
+                  f.write(js); f.close()
+                  r=subprocess.run(['node','--check',f.name],capture_output=True,text=True)
+                  if r.returncode:
+                      print(fn, i, r.stderr); sys.exit(1)
+          r=subprocess.run(['node','--check','supabase-lite.js'],capture_output=True,text=True)
+          if r.returncode:
+              print(r.stderr); sys.exit(1)
+          PY
+      - name: Commit patched portals
+        run: |
+          git config user.name "club924-bot"
+          git config user.email "club924-bot@users.noreply.github.com"
+          git add boss/index.html hitter/index.html admin/index.html supabase-lite.js
+          git diff --cached --quiet && exit 0
+          git commit -m "Use self-hosted auth client on all portals"
+          git push
