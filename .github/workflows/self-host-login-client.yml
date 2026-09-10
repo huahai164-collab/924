@@ -22,6 +22,18 @@ jobs:
                   s=s[:start]+'<script src="/supabase-lite.js"></script>'+s[end+9:]
               s=s.replace("await loadSupabase();","")
               s=s.replace("if(!window.supabase)throw new Error('登录组件加载失败，请刷新页面');","")
+              if fn=='admin/index.html':
+                  s=s.replace('id="email" class="input" autocomplete="username" placeholder="管理员邮箱"','id="username" class="input" autocomplete="username" placeholder="管理员用户名"')
+                  s=s.replace('请输入管理员邮箱和密码','请输入管理员用户名和密码')
+                  old="const email=q('#email').value.trim(),password=q('#pwd').value;"
+                  new="const username=q('#username').value.trim(),password=q('#pwd').value;"
+                  s=s.replace(old,new)
+                  old2="if(!email||!password){msg('请输入管理员用户名和密码','err');return}"
+                  new2="if(!username||!password){msg('请输入管理员用户名和密码','err');return}"
+                  s=s.replace(old2,new2)
+                  old3="const {error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;await refresh()"
+                  new3="const {data,error}=await sb.functions.invoke('club924-portal-login',{body:{portal:'admin',username,password}});if(error)throw new Error(error.message||'登录接口失败');if(!data||data.error)throw new Error(data?.error||'登录失败');const r=await sb.auth.setSession({access_token:data.access_token,refresh_token:data.refresh_token});if(r.error)throw r.error;await refresh()"
+                  s=s.replace(old3,new3)
               p.write_text(s)
           PY
       - name: Verify JavaScript syntax
@@ -49,5 +61,5 @@ jobs:
           git config user.email "club924-bot@users.noreply.github.com"
           git add boss/index.html hitter/index.html admin/index.html supabase-lite.js
           git diff --cached --quiet && exit 0
-          git commit -m "Use self-hosted auth client on all portals"
+          git commit -m "Use self-hosted auth and username login on all portals"
           git push
